@@ -3,6 +3,7 @@ import cors from "cors";
 import authRouter from "./routes/auth.route.js"
 import testRouter from "./routes/test.route.js"
 import productRouter from "./routes/product.route.js"
+import categoryRouter from "./routes/category.route.js"
 import cashierRouter from "./routes/cashier.route.js"
 import shiftRouter from "./routes/shift.route.js"
 import transactionRouter from "./routes/tansaction.route.js"
@@ -23,6 +24,7 @@ app.get("/", (req,res) => {
 app.use("/api/auth", authRouter)
 app.use("/api/test", testRouter)
 app.use("/api/products", productRouter)
+app.use("/api/category", categoryRouter)
 app.use("/api/cashier", cashierRouter)
 app.use("/api/shift",shiftRouter)
 app.use("/api/transaction", transactionRouter)
