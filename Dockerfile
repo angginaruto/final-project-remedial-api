@@ -1,5 +1,5 @@
-# Gunakan Node.js versi LTS
-FROM node:20-slim
+# Gunakan Node.js versi 22 (dibutuhkan oleh Prisma 7)
+FROM node:22-slim
 
 # Install dependencies yang dibutuhkan Prisma (openssl)
 RUN apt-get update -y && apt-get install -y openssl
@@ -17,14 +17,20 @@ RUN npm install
 # Copy semua source code
 COPY . .
 
-# Generate Prisma Client
+# Dummy DATABASE_URL cuma buat proses build (prisma generate gak beneran
+# connect ke database, cuma butuh env var ini "ada" biar config gak error).
+# DATABASE_URL asli tetap diambil dari environment variable Back4app saat runtime.
+ARG DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
+ENV DATABASE_URL=${DATABASE_URL}
+
+# Generate Prisma Client (dibutuhkan biar tsc bisa nemu type dari @prisma/client)
 RUN npx prisma generate
 
 # Compile TypeScript ke JavaScript (folder dist/)
 RUN npm run build
 
 # Expose port (sesuaikan kalau app kamu pakai port lain)
-EXPOSE 3000
+EXPOSE 5000
 
-# Jalankan migrasi Prisma lalu start server
+# Jalankan migrasi Prisma (pakai DATABASE_URL asli dari runtime env), lalu start server
 CMD npx prisma migrate deploy && npm start
