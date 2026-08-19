@@ -29,7 +29,7 @@ RUN npx prisma generate
 # Compile TypeScript ke JavaScript (folder dist/)
 RUN npm run build
 
-# Expose port (sesuaikan kalau app kamu pakai port lain)
+# Expose port (Back4app expects port 5000 by default)
 EXPOSE 5000
 
 # Jalankan migrasi Prisma (pakai DATABASE_URL asli dari runtime env), lalu start server
